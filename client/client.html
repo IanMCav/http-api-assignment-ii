@@ -34,6 +34,9 @@
                     case 201:
                         content.innerHTML = '<b>Create</b>';
                         break;
+                    case 204:
+                        content.innerHTML = '<b>Updated (No Content)</b>';
+                        break;
                     case 304:
                         content.innerHTML = '<b>Not Modified</b>';
                         return;
@@ -47,8 +50,10 @@
                         content.innerHTML = `Error code not implemented by client.`;
                         break;
                 }
+                
+                console.log(xhr);
 
-                if(xhr.status !== 304) {
+                if(xhr.status !== 304 || xhr.responseType !== 'HEAD') {
                     parseJSON(xhr, content);
                 }
             };
