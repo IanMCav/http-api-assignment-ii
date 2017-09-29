@@ -1,4 +1,5 @@
 const users = {};
+let repeatReq = false;
 
 const respondJSON = (request, response, status, object) => {
   response.writeHead(status, { 'Content-Type': 'application/json' });
@@ -16,7 +17,12 @@ const getUsers = (request, response) => {
     users,
   };
 
-  respondJSON(request, response, 200, responseJSON);
+  if (!repeatReq) {
+    respondJSON(request, response, 200, responseJSON);
+    repeatReq = true;
+  } else {
+    respondJSON(request, response, 304, responseJSON);
+  }
 };
 
 const addUser = (request, response, body) => {
@@ -30,6 +36,7 @@ const addUser = (request, response, body) => {
   }
 
   let responseCode = 201;
+  repeatReq = false;
 
   if (users[body.name]) {
     responseCode = 204;
